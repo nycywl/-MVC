@@ -1,0 +1,199 @@
+﻿@model DTO.ChampionData
+@{
+    ViewData["Title"] = $"英雄介紹 - {Model.DTO_Champion.Name}";    
+}
+<div class="page-body">
+    <a href="@Url.Action("Menu","LoL")" style="margin:0.5em">回到首頁</a>
+    <div class="container-fluid">
+        <div>
+            <div class="row product-page-main p-0">
+                <div class="col-xl-4 col-md-12 box-col-12 xl-30">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-12 product-main">
+                                    <div class="pro-slide-single slick-initialized slick-slider">
+                                        <h4>@Model.DTO_Champion.Title @Model.DTO_Champion.Name</h4>
+                                        <div class="slick-list draggable">
+                                            <div class="slick-track">
+                                                <div class="slide-box slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" tabindex="0" style="width: 308px; position: relative; left: 0px; top: 0px;">
+                                                    <img class="img-fluid" src="@Model.LoadingImage" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 box-col-12 proorder-xl-12 xl-70">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="pro-group pt-0">
+                                <div class="product-page-details">
+                                    <h3>新手建議</h3>
+                                </div>
+                            </div>
+                            <div class="pro-group">
+
+                                <a href="@Url.Action("AddLove","LoL",new { Id = Model.DTO_Champion.Id })" style="margin:0.5em">加入最愛</a>
+                            </div>
+                            <div class="pro-group pt-0">
+                                <div class="product-page-details">
+                                    <h3>技能列表</h3>
+                                </div>
+                            </div>
+                            <div class="pro-group">
+                                @foreach (var data in Model.DTO_Spells ?? [])
+                                {
+                                    <table>
+                                        <tr>
+                                            <td><img src="https://ddragon.leagueoflegends.com/cdn/10.22.1/img/spell/@data.ImageId" /></td>
+                                            <td style="width: 100px;"><p style="margin:1em">@data.Name</p></td>
+                                            <td><p>@data.Description</p></td>
+                                        </tr>
+                                    </table>
+                                }
+                            </div>
+                            <div class="pro-group">
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><b>生命值:</b></td>
+                                                        <td>@Model.DTO_States.Hp</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>每級生命值成長:</b></td>
+                                                        <td>@Model.DTO_States.Hpperlevel</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>魔力值:</b></td>
+                                                        <td>@Model.DTO_States.Mp</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>每級魔力值成長:</b></td>
+                                                        <td>@Model.DTO_States.Mpperlevel</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>移動速度:</b></td>
+                                                        <td>@Model.DTO_States.Movespeed</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>護甲值:</b></td>
+                                                        <td>@Model.DTO_States.Armor</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>每級護甲成長:</b></td>
+                                                        <td>@Model.DTO_States.Armorperlevel</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>魔法抗性:</b></td>
+                                                        <td>@Model.DTO_States.Spellblock</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>每級魔法抗性成長:</b></td>
+                                                        <td>@Model.DTO_States.Spellblockperlevel</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>攻擊範圍:</b></td>
+                                                        <td>@Model.DTO_States.Attackrange</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><b>生命回復:</b></td>
+                                                        <td>@Model.DTO_States.Hpregen</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>每級生命回復成長:</b></td>
+                                                        <td>@Model.DTO_States.Hpregenperlevel</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>魔力回復:</b></td>
+                                                        <td>@Model.DTO_States.Mpregen</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>每級魔力回復成長:</b></td>
+                                                        <td>@Model.DTO_States.Mpregenperlevel</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>暴擊:</b></td>
+                                                        <td>@Model.DTO_States.Crit</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>每級暴擊成長:</b></td>
+                                                        <td>@Model.DTO_States.Critperlevel</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>攻擊力:</b></td>
+                                                        <td>@Model.DTO_States.Attackdamage</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>每級攻擊力成長:</b></td>
+                                                        <td>@Model.DTO_States.Attackdamageperlevel</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>每級攻擊速度成長:</b></td>
+                                                        <td>@Model.DTO_States.Attackspeedperlevel</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>攻擊速度:</b></td>
+                                                        <td>@Model.DTO_States.Attackspeed</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-md-12 box-col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <canvas id="radarChart" style="max-width:400px;max-height:400px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    const data = {
+        labels: ['Attack', 'Defense', 'Magic', 'Difficulty'],
+        datasets: [{
+            label: 'Info',
+            data: [@Model.DTO_Info.Attack, @Model.DTO_Info.Defense, @Model.DTO_Info.Magic, @Model.DTO_Info.Difficulty], // 替換成你的數值
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'radar',
+        data: data,
+        options: {
+            scales: {
+                r: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+    const radarChart = new Chart(ctx, config);
+</script>

@@ -1,0 +1,32 @@
+﻿@model List<Love>
+@{
+    ViewData["Title"] = $"我的最愛";
+}
+<body>
+    <div class="page-body">
+        <div class="container-fluid">
+            <a href="@Url.Action("Menu","LoL")" style="margin:0.5em">回到首頁</a>
+        </div>
+        <div class="container-fluid product-wrapper sidebaron">
+            <div class="product-grid">
+                <div class="phone_ver product-wrapper-grid">
+                    <div class="row" id="phone-product-container">
+                        @foreach (var data in Model)
+                        {
+                            <div class="col-xl-4 col-sm-4 product-item" id="@data.Id">
+                                <div class="card">
+                                    <div class="product-box">
+                                        <div class="product-details" style="display: flex;padding:5px">
+                                            <p>@data.Id</p>
+                                            <a href="@Url.Action("RemoveLove","LoL",new { Id = data.Id })" style="margin:0.5em">移除最愛</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

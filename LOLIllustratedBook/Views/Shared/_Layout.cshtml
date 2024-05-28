@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html lang="zh-tw">
+@await Html.PartialAsync("Blocks/load_head")
+<body>
+    <div class="loader-wrapper">
+        <div class="loading">Loading...    </div>
+    </div>
+    <div class="page-wrapper compact-wrapper" id="pageWrapper">
+        <div class="page-body-wrapper sidebar-icon">
+            @RenderBody()
+            <div class="tap-top"><i class="icon-control-eject"></i></div>
+        </div>
+    </div>
+    @await Html.PartialAsync("Blocks/load_js")
+</body>
+</html>

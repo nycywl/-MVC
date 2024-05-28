@@ -1,0 +1,24 @@
+﻿.product-details p {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+}
+
+.product-details.expanded p {
+    -webkit-line-clamp: none;
+    display: block;
+}
+
+.show-more {
+    display: inline-block;
+    margin-top: 5px;
+    color: #007bff;
+    cursor: pointer;
+}
+
+    .show-more.expanded {
+        display: none;
+    }

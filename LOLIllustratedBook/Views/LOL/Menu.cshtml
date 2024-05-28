@@ -1,0 +1,222 @@
+﻿@model List<DTO.DTOChampion>
+@{
+    ViewData["Title"] = $"英雄列表";
+    List<SelectListItem> statesList = ViewBag.States;
+    List<SelectListItem> championTagsList = ViewBag.ChampionTags;
+    
+    string search = ViewBag.Search;
+    int ststeValue = ViewBag.StsteValue;
+}
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @@media (min-width: 576px) {
+            .phone_ver {
+                display: none;
+            }
+            .computer_ver {
+                display: flex;
+            }
+        }
+
+        @@media (max-width: 575.98px) {
+            .phone_ver {
+                display: flex;
+            }
+            .computer_ver {
+                display: none;
+            }
+        }
+
+        .responsive-img {
+            max-width: auto;
+            height: 50px;
+            border-radius: 15px;
+        }
+
+        .pagination-container {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .page-link {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .page-link.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-body">
+        <div class="container-fluid">
+
+            <a href="@Url.Action("Love","LoL")" style="margin:0.5em">我的最愛</a>
+        </div>
+        <div class="container-fluid product-wrapper sidebaron">
+            <div class="product-grid">
+                <div class="feature-products">
+                    <div class="row">
+                        <div class="col-md-12" style="margin-bottom:1em">
+                            <div class="pro-filter-sec">
+                                <div class="product-search">
+                                    <form method="get" asp-action="Menu">
+                                        <div class="form theme-form">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    @Html.DropDownList("tag", championTagsList, new { @class = "form-select" })
+                                                </div>
+                                                <div class="col-3">
+                                                    @Html.DropDownList("state", statesList, new { @class = "form-select" })
+                                                </div>
+                                                <div class="col-2">
+                                                    <input class="form-control" type="number" name="ststeValue" placeholder="數值" value="@ststeValue" />
+                                                </div>
+                                                <div class="col-3">
+                                                    <input class="form-control" type="search" name="search" placeholder="關鍵字" value="@search" />
+                                                </div>
+                                                <div class="col-1">
+                                                    <button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="phone_ver product-wrapper-grid">
+                    <div class="row" id="phone-product-container">
+                        @foreach (var data in Model)
+                        {
+                            <div class="col-xl-4 col-sm-4 product-item" id="@data.Id" style="display: none;">
+                                <div class="card">
+                                    <div class="product-box">
+                                        <div class="product-details" style="display: flex;padding:5px">
+                                            <img class="responsive-img" src="@data.ImageURL" alt="@data.Name" style="margin:0.5em">
+                                            <a href="@Url.Action("ChampionContent","LoL",new { Id = data.Id })" style="margin:0.5em">
+                                                <h4>@data.Title @data.Name</h4>
+                                                <p>@data.Blurb</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="phone-pagination-container" class="pagination-container phone_ver"></div>
+                <div class="product-wrapper-grid computer_ver">
+                    <div class="row" id="computer-product-container">
+                        @foreach (var data in Model)
+                        {
+                            <div class="col-xl-4 col-sm-4 product-item" id="@data.Id" style="display: none;">
+                                <div class="card">
+                                    <div class="product-box">
+                                        <div class="product-img">
+                                            <img class="img-fluid" src="@data.ImageURL" alt="@data.Name">
+                                        </div>
+                                        <div class="product-details">
+                                            <a href="@Url.Action("ChampionContent","LoL",new { Id = data.Id })">
+                                                <h4>@data.Title @data.Name</h4>
+                                            </a>
+                                            <p>@data.Blurb</p>
+                                            <a href="javascript:void(0);" class="show-more">顯示更多</a>
+                                        </div>
+                                        <div style="display: inline-block;text-align: center; width: 100%;padding-inline: 1em;">
+                                            <a type="button" class="btn btn-success" href="@Url.Action("ChampionContent","LoL",new { Id = data.Id })" style="border-radius: 10px;margin-bottom:1em;">查看詳情</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="computer-pagination-container" class="computer_ver pagination-container"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            function setupPagination(container, paginationContainer, itemsPerPage) {
+                var items = container.find('.product-item');
+                var totalItems = items.length;
+                var totalPages = Math.ceil(totalItems / itemsPerPage);
+
+                function showPage(page) {
+                    items.hide();
+                    var start = (page - 1) * itemsPerPage;
+                    var end = start + itemsPerPage;
+                    items.slice(start, end).show();
+                }
+
+                function createPagination() {
+                    paginationContainer.empty();
+                    var firstPage = '<a href="javascript:void(0);" class="page-link" data-page="1">第一頁</a>';
+                    var prevPage = '<a href="javascript:void(0);" class="page-link" data-page="prev">上一頁</a>';
+                    var nextPage = '<a href="javascript:void(0);" class="page-link" data-page="next">下一頁</a>';
+                    var lastPage = '<a href="javascript:void(0);" class="page-link" data-page="' + totalPages + '">最後一頁</a>';
+                    
+                    paginationContainer.append(firstPage + prevPage);
+
+                    for (var i = 1; i <= totalPages; i++) {
+                        paginationContainer.append('<a href="javascript:void(0);" class="page-link" data-page="' + i + '">' + i + '</a>');
+                    }
+
+                    paginationContainer.append(nextPage + lastPage);
+                    paginationContainer.find('a').eq(2).addClass('active');
+                    updatePaginationVisibility(1);
+                }
+
+                function updatePaginationVisibility(currentPage) {
+                    paginationContainer.find('.page-link').hide();
+                    paginationContainer.find('.page-link[data-page="1"]').show();
+                    paginationContainer.find('.page-link[data-page="prev"]').show();
+                    paginationContainer.find('.page-link[data-page="next"]').show();
+                    paginationContainer.find('.page-link[data-page="' + totalPages + '"]').show();
+
+                    var $currentPage = paginationContainer.find('.page-link[data-page="' + currentPage + '"]');
+                    $currentPage.show();
+                    $currentPage.prev().show();
+                    $currentPage.next().show();
+                }
+
+                paginationContainer.on('click', 'a', function () {
+                    var page = $(this).data('page');
+                    var currentPage = paginationContainer.find('a.active').data('page');
+
+                    if (page === 'prev') {
+                        page = currentPage > 1 ? currentPage - 1 : 1;
+                    } else if (page === 'next') {
+                        page = currentPage < totalPages ? currentPage + 1 : totalPages;
+                    }
+
+                    paginationContainer.find('a').removeClass('active');
+                    paginationContainer.find('a[data-page="' + page + '"]').addClass('active');
+
+                    showPage(page);
+                    updatePaginationVisibility(page);
+                });
+
+                showPage(1);
+                createPagination();
+            }
+
+            var itemsPerPage = 6;
+
+            setupPagination($('#computer-product-container'), $('#computer-pagination-container'), itemsPerPage);
+
+            setupPagination($('#phone-product-container'), $('#phone-pagination-container'), itemsPerPage);
+        });
+    </script>
+</body>
+</html>
